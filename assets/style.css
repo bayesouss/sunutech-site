@@ -12,6 +12,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-soft: rgba(255, 255, 255, 0.06);
   --border-input: rgba(255, 255, 255, 0.1);
+  --whatsapp: #25D366;
+  --success: #4ADE80;
 }
 
 * { box-sizing: border-box; }
@@ -130,6 +132,25 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
 .site-footer .footer-brand img { width: 30px; height: 30px; }
 .site-footer .footer-brand span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: var(--text); }
 .site-footer p { font-size: 14px; line-height: 1.6; max-width: 280px; margin: 0 0 4px; }
+/* Réseaux sociaux : gris au repos, couleur officielle de la plateforme au survol. */
+.social-links { display: flex; gap: 12px; margin-top: 18px; }
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-dim);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.social-link svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+.social-link:hover { transform: translateY(-3px); }
+.social-link.facebook:hover { color: #1877F2; border-color: rgba(24, 119, 242, 0.5); background: rgba(24, 119, 242, 0.1); }
+.social-link.instagram:hover { color: #E4405F; border-color: rgba(228, 64, 95, 0.5); background: rgba(228, 64, 95, 0.1); }
+.social-link.tiktok:hover { color: #FFFFFF; border-color: rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
+
 .site-footer .footer-heading { color: var(--text); font-weight: 600; font-size: 14px; margin-bottom: 14px; }
 .site-footer .footer-links { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
 .site-footer .footer-links a { color: var(--text-muted); text-decoration: none; }
@@ -208,6 +229,7 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 .contact-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.contact-card.whatsapp:hover { border-color: var(--whatsapp); }
 .contact-card svg { flex-shrink: 0; }
 .contact-card .label { color: var(--text); font-weight: 600; font-size: 14.5px; }
 .contact-card .value { color: var(--text-muted); font-size: 14px; }
@@ -233,7 +255,14 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
   font-size: 14.5px;
 }
 .form-field textarea { resize: vertical; }
+.form-field .optional { color: var(--text-dim); font-size: 12px; }
 .contact-form { display: flex; flex-direction: column; gap: 18px; }
+
+/* Piège à robots : invisible pour l'utilisateur, rempli par les spambots */
+.hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
+
+.form-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+.form-or { color: var(--text-dim); font-size: 13.5px; }
 .submit-btn {
   padding: 15px 28px;
   background: var(--accent);
@@ -243,11 +272,32 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
   border-radius: 10px;
   font-size: 15px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-  align-self: flex-start;
+  transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
 }
 .submit-btn:hover { background: var(--accent-light); transform: translateY(-2px); }
 .submit-btn:active { transform: scale(0.97); }
+.submit-btn:disabled { opacity: 0.55; cursor: wait; transform: none; }
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 24px;
+  border: 1px solid rgba(37, 211, 102, 0.45);
+  border-radius: 10px;
+  color: var(--whatsapp);
+  font-weight: 600;
+  font-size: 14.5px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.btn-whatsapp:hover { background: rgba(37, 211, 102, 0.12); border-color: var(--whatsapp); transform: translateY(-2px); }
+.btn-whatsapp svg { flex-shrink: 0; }
+
+.form-status { font-size: 14px; line-height: 1.6; margin: 0; }
+.form-status:empty { display: none; }
+.form-status.success { color: var(--success); }
+.form-status.error { color: var(--accent-light); }
 
 /* Shared building blocks (Accueil, A-Propos, Services, Réalisations) */
 .eyebrow {
@@ -313,6 +363,22 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
 }
 .info-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(0,0,0,0.35); border-color: rgba(255,90,31,0.3); }
 .info-card svg { margin-bottom: 16px; }
+
+/* Style commun des icônes métier : tracé fin orange, sans remplissage.
+   Chaque activité a son propre dessin, seule la mise en forme est partagée. */
+.svc-icon {
+  width: 36px;
+  height: 36px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+.value-card .svc-icon { margin: 0 auto 16px; }
+.contact-card .svc-icon { width: 30px; height: 30px; flex-shrink: 0; }
+.cta-card .svc-icon { margin-bottom: 14px; }
 .info-card h3 { font-size: 17px; margin: 0 0 8px; }
 .info-card p { font-size: 14px; line-height: 1.6; margin: 0; }
 
@@ -430,13 +496,66 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 16px 30px rgba(0,0,0,0.35); }
+/* Aligné sur le format natif des captures d'écran (environ 2,18/1) pour réduire
+   le recadrage au strict minimum. Aucun enfant n'est laissé dans le flux normal :
+   la hauteur découle donc uniquement de aspect-ratio et ne peut pas être étirée
+   par le contenu. */
 .portfolio-thumb {
-  aspect-ratio: 16 / 10;
+  position: relative;
+  aspect-ratio: 2 / 1;
+  min-height: 0;
   background: repeating-linear-gradient(135deg, rgba(255,90,31,0.14) 0 12px, rgba(255,90,31,0.05) 12px 24px);
   border-bottom: 1px solid rgba(255,90,31,0.2);
-  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
 }
-.portfolio-thumb span { font-family: monospace; font-size: 12px; color: var(--accent-soft); text-align: center; padding: 0 16px; }
+.portfolio-thumb span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--accent-soft);
+  text-align: center;
+  padding: 0 16px;
+}
+
+/* La capture recouvre le motif de remplissage. Si le fichier image est absent,
+   main.js retire la balise et le texte de repérage réapparaît. */
+.portfolio-thumb .thumb-shot {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  transition: transform 0.4s ease;
+}
+.portfolio-card:hover .thumb-shot { transform: scale(1.04); }
+
+.badge-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.badge-row .portfolio-badge { margin-bottom: 0; }
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--success);
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.status-badge::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
 .portfolio-card .body { padding: 22px; }
 .portfolio-card.compact .body { padding: 24px; }
 .portfolio-card h3 { font-size: 16px; margin: 0 0 8px; }
